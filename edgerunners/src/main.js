@@ -62,14 +62,14 @@ async function start() {
   // --- Monde ---
   const sky = createSky();
   const city = createCity();
-  boot.log(`génération de la ville`, `${city.towerCount} tours`);
+  boot.log('génération de Night City', `${city.towerCount} tours`);
   const ground = createGround();
   const signs = createSigns(city.avenueLots);
   const traffic = createTraffic();
   const rain = createRain();
   const moon = createMoon();
   const core = createCore(createNeonEnvironment(renderer));
-  boot.log('implant de chrome', 'en ligne');
+  boot.log('Sandevistan', 'synchronisé');
   scene.add(sky.object, moon.object, ground.object, city.object, signs.object, traffic.object, rain.object, core.object);
 
   const towersStat = document.querySelector('[data-stat="towers"]');
@@ -78,6 +78,12 @@ async function start() {
   // --- Effets, caméra, interface ---
   const post = createPostFX(renderer, scene, camera);
   const dilation = createTimeDilation(scene, core.object);
+  // Compile tous les shaders maintenant (images rémanentes comprises) : sinon chaque
+  // objet qui entre dans le champ pour la première fois fige l'image un instant.
+  const hidden = [];
+  scene.traverse((o) => { if (!o.visible) { hidden.push(o); o.visible = true; } });
+  renderer.compile(scene, camera);
+  hidden.forEach((o) => { o.visible = false; });
   const rig = createScrollRig(camera, CHAPTERS);
   const hud = createHUD({ onChapterChange: () => post.triggerGlitch(0.8) });
 
@@ -101,7 +107,7 @@ async function start() {
     let { x, y } = offset;
     if (aspect < 1) {
       x *= 0.15;
-      y += 3.6;
+      y += 6.2;
     } else {
       x *= Math.min(1, aspect / 1.6);
     }
@@ -114,7 +120,7 @@ async function start() {
     // fixé dans le repère caméra : l'implant reste cadré même pendant un défilement rapide
     rig.cameraSpaceToWorld(x, y, offset.dist, coreTarget);
     core.object.position.copy(coreTarget);
-    const s = offset.scale * (aspect < 1 ? 0.8 : 1);
+    const s = offset.scale * (aspect < 1 ? 0.72 : 1);
     core.object.scale.setScalar(s);
   }
 
@@ -139,7 +145,7 @@ async function start() {
 
   // Accès console pour régler les images clés : ouvrir la page avec ?debug
   if (new URLSearchParams(location.search).has('debug')) {
-    window.__NEON__ = { THREE, camera, core: core.object, rig, scene };
+    window.__SCENE__ = { THREE, camera, core: core.object, rig, scene };
   }
 
   // --- Boucle ---
@@ -152,7 +158,9 @@ async function start() {
   rig.cameraSpaceToWorld(rig.coreOffset.x, rig.coreOffset.y, rig.coreOffset.dist, core.object.position);
 
   function frame() {
-    const dtReal = Math.min(clock.getDelta(), 0.05);
+    // rawDt : temps réel exact (mesures d'i/s) ; dtReal : plafonné pour la simulation
+    const rawDt = clock.getDelta();
+    const dtReal = Math.min(rawDt, 0.05);
     realTime += dtReal;
     dilation.update(dtReal);
     const dt = dtReal * dilation.timeScale;
@@ -172,7 +180,7 @@ async function start() {
 
     post.render(realTime, dtReal, { speed: rig.speed, dilation: dilation.amount });
 
-    hud.update(dtReal, {
+    hud.update(rawDt, {
       progress: rig.progress,
       chapter: rig.chapter,
       altitude: camera.position.y * 2.4,
@@ -180,7 +188,7 @@ async function start() {
       timeScale: dilation.timeScale,
     });
 
-    adaptQuality(dtReal);
+    adaptQuality(rawDt);
 
     if (first) {
       first = false;

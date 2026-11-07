@@ -1,5 +1,5 @@
 @echo off
-rem Lance Neon Moon en local sur Windows : double-cliquer sur ce fichier.
+rem Lance Cyberpunk: Edgerunners (fan-projet) en local sur Windows : double-cliquer sur ce fichier.
 rem Les modules JavaScript ne se chargent pas en ouvrant index.html directement
 rem (file://), il faut un petit serveur local.
 cd /d "%~dp0"

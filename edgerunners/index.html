@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<title>Cyberpunk: Edgerunners</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Fan-projet personnel : Night City en 3D, le Sandevistan de David, l'équipe de Maine et la Lune de Lucy.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Chakra+Petch:wght@400;500;600;700&family=DotGothic16&family=Share+Tech+Mono&display=swap">
+<link rel="stylesheet" href="./css/style.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module" src="./src/main.js"></script>
+</head>
+<body>
+
+<canvas id="scene" aria-hidden="true"></canvas>
+
+<!-- Écran de démarrage : retiré dès la première image rendue -->
+<div class="boot" id="boot" role="status" aria-live="polite">
+  <div class="boot__inner">
+    <p class="boot__brand">CYBERPUNK<span>//</span>EDGERUNNERS</p>
+    <ol class="boot__log" id="boot-log">
+      <li>&gt; connexion à Night City ........ en cours</li>
+    </ol>
+  </div>
+</div>
+
+<!-- HUD haut -->
+<header class="hud hud--top">
+  <a class="hud__brand" href="#ch-1" aria-label="Edgerunners, retour au début">EDGE<span>//</span>RUNNERS</a>
+  <nav class="rail" aria-label="Chapitres">
+    <a href="#ch-1" class="rail__tick is-active" data-chapter="0"><span>01</span> Night City</a>
+    <a href="#ch-2" class="rail__tick" data-chapter="1"><span>02</span> Arasaka</a>
+    <a href="#ch-3" class="rail__tick" data-chapter="2"><span>03</span> Sandevistan</a>
+    <a href="#ch-4" class="rail__tick" data-chapter="3"><span>04</span> L'équipe</a>
+    <a href="#ch-5" class="rail__tick" data-chapter="4"><span>05</span> La Lune</a>
+  </nav>
+  <dl class="telemetry">
+    <div><dt>Heure</dt><dd id="t-clock">--:--:--</dd></div>
+    <div><dt>Alt.</dt><dd id="t-alt">--- m</dd></div>
+    <div class="telemetry__fps"><dt>i/s</dt><dd id="t-fps">--</dd></div>
+  </dl>
+</header>
+
+<main id="story">
+
+  <section class="chapter chapter--hero" id="ch-1" data-align="left">
+    <div class="hero">
+      <p class="eyebrow"><span class="jp">ナイトシティ</span> Night City<span class="hide-narrow"> — Santo Domingo</span> — 2076</p>
+
+      <!-- Logo : si assets/logo.png existe, il remplace la recréation SVG -->
+      <h1 class="logo" aria-label="Cyberpunk: Edgerunners">
+        <img class="logo__official" src="./assets/logo.png" alt="" onload="document.documentElement.classList.add('has-logo')" onerror="this.remove()">
+        <svg class="logo__mark" viewBox="0 0 1000 330" aria-hidden="true">
+          <defs>
+            <clipPath id="logo-cut-top"><rect x="-200" y="0" width="1400" height="122"></rect></clipPath>
+            <clipPath id="logo-cut-bottom"><rect x="-200" y="130" width="1400" height="120"></rect></clipPath>
+          </defs>
+          <g transform="skewX(-10)">
+            <g class="logo__ghost">
+              <text x="42" y="214" textLength="900" lengthAdjust="spacingAndGlyphs">CYBERPUNK</text>
+            </g>
+            <g class="logo__cyber">
+              <text class="logo__slice" x="56" y="210" textLength="900" lengthAdjust="spacingAndGlyphs" clip-path="url(#logo-cut-top)">CYBERPUNK</text>
+              <text x="46" y="210" textLength="900" lengthAdjust="spacingAndGlyphs" clip-path="url(#logo-cut-bottom)">CYBERPUNK</text>
+            </g>
+          </g>
+          <rect class="logo__bar" x="58" y="246" width="190" height="10"></rect>
+          <text class="logo__edge" x="958" y="300" text-anchor="end" textLength="660" lengthAdjust="spacingAndGlyphs">EDGERUNNERS</text>
+        </svg>
+      </h1>
+
+      <p class="hero__lede">Dans Night City, on vit vite et on meurt jeune. David Martinez avait un implant de trop, et un rêve qui n'était pas le sien&nbsp;: la Lune.</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="#ch-2">Entrer dans Night City</a>
+        <p class="hint"><span class="only-keyboard"><kbd>Espace</kbd> ou appui long</span><span class="only-touch">Appui long</span>&nbsp;: Sandevistan</p>
+      </div>
+    </div>
+    <p class="vertical-jp" aria-hidden="true">サイバーパンク・エッジランナーズ</p>
+  </section>
+
+  <section class="chapter" id="ch-2" data-align="right">
+    <article class="panel">
+      <p class="tag"><span>02</span> Arasaka <span class="jp">荒坂</span></p>
+      <h2 class="glitch" data-text="Bienvenue à Night City">Bienvenue à Night City</h2>
+      <p>Au-dessus de Santo Domingo, la tour Arasaka écrase l'horizon. En bas, les gangs, les fixers et les mercenaires se partagent les miettes. Ici, on devient une légende ou on finit flatline.</p>
+      <dl class="stats">
+        <div><dt>Tours</dt><dd data-stat="towers">1&nbsp;618</dd></div>
+        <div><dt>Année</dt><dd>2076</dd></div>
+        <div><dt>Corpo</dt><dd>Arasaka</dd></div>
+      </dl>
+    </article>
+  </section>
+
+  <section class="chapter" id="ch-3" data-align="left">
+    <article class="panel">
+      <p class="tag"><span>03</span> Sandevistan <span class="jp">時間減速</span></p>
+      <h2 class="glitch" data-text="Une seconde devient dix">Une seconde devient dix</h2>
+      <p>Un Sandevistan de qualité militaire, greffé le long de la colonne de David. Il accélère les réflexes jusqu'à ce que Night City ralentisse autour de lui. Chaque activation rapproche un peu plus de la cyberpsychose.</p>
+      <p class="try"><span class="only-keyboard">Maintiens <kbd>Espace</kbd>, ou garde le doigt appuyé sur l'écran, pour l'activer.</span><span class="only-touch">Garde le doigt appuyé sur l'écran pour l'activer.</span></p>
+      <dl class="stats">
+        <div><dt>Facteur temps</dt><dd>×0,12</dd></div>
+        <div><dt>Grade</dt><dd>Militaire</dd></div>
+        <div><dt>Risque</dt><dd class="is-danger">Cyberpsychose</dd></div>
+      </dl>
+    </article>
+  </section>
+
+  <section class="chapter" id="ch-4" data-align="left">
+    <article class="panel panel--wide">
+      <p class="tag"><span>04</span> L'équipe <span class="jp">エッジランナーズ</span></p>
+      <h2 class="glitch" data-text="L'équipe de Maine">L'équipe de Maine</h2>
+      <p>Des edgerunners&nbsp;: des mercenaires payés au contrat, qui vivent sur le fil entre le chrome et la cyberpsychose.</p>
+      <!-- Photos facultatives : assets/crew/<prenom>.jpg (voir README) -->
+      <ul class="crew">
+        <li class="crew__card" style="--c: var(--yellow)">
+          <span class="crew__photo"><b>DM</b><img src="./assets/crew/david.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+          <span class="crew__name">David Martinez</span>
+          <span class="crew__role">Sandevistan militaire</span>
+        </li>
+        <li class="crew__card" style="--c: var(--cyan)">
+          <span class="crew__photo"><b>LU</b><img src="./assets/crew/lucy.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+          <span class="crew__name">Lucy</span>
+          <span class="crew__role">Netrunneuse</span>
+        </li>
+        <li class="crew__card" style="--c: var(--acid)">
+          <span class="crew__photo"><b>RE</b><img src="./assets/crew/rebecca.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+          <span class="crew__name">Rebecca</span>
+          <span class="crew__role">Flingueuse, bras de chrome</span>
+        </li>
+        <li class="crew__card" style="--c: var(--red)">
+          <span class="crew__photo"><b>MA</b><img src="./assets/crew/maine.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+          <span class="crew__name">Maine</span>
+          <span class="crew__role">Chef de l'équipe</span>
+        </li>
+        <li class="crew__card" style="--c: var(--violet)">
+          <span class="crew__photo"><b>DO</b><img src="./assets/crew/dorio.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+          <span class="crew__name">Dorio</span>
+          <span class="crew__role">Bras droit de Maine</span>
+        </li>
+        <li class="crew__card" style="--c: var(--magenta)">
+          <span class="crew__photo"><b>KI</b><img src="./assets/crew/kiwi.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+          <span class="crew__name">Kiwi</span>
+          <span class="crew__role">Netrunneuse, mentor de Lucy</span>
+        </li>
+        <li class="crew__card" style="--c: var(--orange)">
+          <span class="crew__photo"><b>PI</b><img src="./assets/crew/pilar.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+          <span class="crew__name">Pilar</span>
+          <span class="crew__role">Frère de Rebecca</span>
+        </li>
+        <li class="crew__card" style="--c: var(--ink)">
+          <span class="crew__photo"><b>FA</b><img src="./assets/crew/falco.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+          <span class="crew__name">Falco</span>
+          <span class="crew__role">Pilote</span>
+        </li>
+      </ul>
+      <p class="threats"><span>Dans le viseur</span> Faraday, fixer · Adam Smasher, Arasaka</p>
+    </article>
+  </section>
+
+  <section class="chapter chapter--finale" id="ch-5" data-align="center">
+    <article class="finale">
+      <p class="tag"><span>05</span> La Lune <span class="jp">月へ</span></p>
+      <h2 class="finale__title glitch" data-text="Un jour, on ira là-haut">Un jour, on ira là-haut</h2>
+      <p>Lucy en rêvait depuis toujours&nbsp;: quitter Night City et marcher sur la Lune. 384&nbsp;400&nbsp;km. Aucun implant ne raccourcit cette distance.</p>
+      <a class="btn" href="#ch-1">Remonter au début</a>
+      <p class="credits">Fan-projet personnel, non publié. Cyberpunk: Edgerunners © CD PROJEKT RED, Studio Trigger, Netflix. Scène 3D générée en temps réel avec Three.js.</p>
+    </article>
+  </section>
+
+</main>
+
+<!-- HUD bas -->
+<footer class="hud hud--bottom">
+  <div class="progress" aria-hidden="true">
+    <span class="progress__label" id="p-label">01 / 05 — Night City</span>
+    <span class="progress__track"><span class="progress__bar" id="p-bar"></span></span>
+  </div>
+  <button class="dilate-btn" id="dilate-btn" type="button" aria-label="Maintenir pour activer le Sandevistan">
+    <span class="dilate-btn__dot" aria-hidden="true"></span>
+    <span>Sandevistan<span class="hide-narrow">&nbsp;: maintenir</span></span>
+  </button>
+</footer>
+
+<!-- Calque affiché pendant le Sandevistan -->
+<div class="dilation" aria-hidden="true">
+  <p class="dilation__readout">SANDEVISTAN <span class="jp">時間減速</span> <span id="d-factor">×1,00</span></p>
+</div>
+
+<noscript><p class="noscript">Cette scène 3D a besoin de JavaScript.</p></noscript>
+
+</body>
+</html>

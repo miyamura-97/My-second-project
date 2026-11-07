@@ -110,8 +110,16 @@ export function createCity() {
   const instances = []; // { x, z, w, d, h, y, seed: [a, b, c] }
   const avenueLots = []; // tours dont une façade donne sur l'avenue (pour les enseignes)
   const beacons = []; // sommets d'antennes (feux rouges clignotants)
-  const { avenueHalf, block, street, xMax, zMin, zMax } = WORLD;
+  const { avenueHalf, block, street, xMax, zMin, zMax, arasaka } = WORLD;
   const pitch = block + street;
+
+  // emprise réservée à la tour Arasaka (avec une marge pour la dégager)
+  const reserved = {
+    x0: arasaka.x - arasaka.w / 2 - 8, x1: arasaka.x + arasaka.w / 2 + 8,
+    z0: arasaka.z - arasaka.d / 2 - 8, z1: arasaka.z + arasaka.d / 2 + 8,
+  };
+  const overlapsReserved = (x, z, w, d) =>
+    x + w / 2 > reserved.x0 && x - w / 2 < reserved.x1 && z + d / 2 > reserved.z0 && z - d / 2 < reserved.z1;
 
   const addTower = (x, z, w, d, h, isAvenue) => {
     const seed = [r(), r(), r()];
@@ -154,11 +162,23 @@ export function createCity() {
             const facesAvenue = xi === 0 && i === 0;
             // bord intérieur aligné sur l'avenue pour les tours de première ligne
             const xAligned = facesAvenue ? side * (inner + w / 2) : x;
+            if (overlapsReserved(xAligned, cz, w, d)) continue;
             addTower(xAligned, cz, w, d, h, facesAvenue);
           }
         }
       }
     }
+  }
+
+  // Tour Arasaka : socle massif, deux retraits, flèche avec feu rouge
+  {
+    const { x, z, w, d, h } = arasaka;
+    const corp = [0.95, 0.1, 0.18]; // arêtes + bandeau magenta-rouge, peu de fenêtres
+    instances.push({ x, z, w, d, h, y: 0, seed: corp });
+    instances.push({ x, z, w: w * 0.72, d: d * 0.72, h: 70, y: h, seed: corp });
+    instances.push({ x, z, w: w * 0.4, d: d * 0.4, h: 40, y: h + 70, seed: corp });
+    instances.push({ x, z, w: 1.4, d: 1.4, h: 45, y: h + 110, seed: [0, 0, -1] });
+    beacons.push(new THREE.Vector3(x, h + 156, z));
   }
 
   // Horizon lointain : grands volumes peu détaillés, noyés dans le brouillard

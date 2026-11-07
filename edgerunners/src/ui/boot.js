@@ -29,7 +29,7 @@ export function createBoot() {
       line(`> ${label} ${'.'.repeat(Math.max(2, 28 - label.length))} ${status}`);
     },
     done() {
-      line('> liaison neurale ............ établie');
+      line('> connexion à Night City ........ établie');
       const wait = Math.max(0, MIN_VISIBLE - (performance.now() - shownAt));
       clearTimeout(safety);
       setTimeout(close, wait);

@@ -1,4 +1,4 @@
-// L'implant : le « module 3D » central qui suit la caméra d'un chapitre à l'autre.
+// Le Sandevistan : le « module 3D » central qui suit la caméra d'un chapitre à l'autre.
 // Coque de 20 plaques de chrome qui s'écartent pour laisser voir un cœur d'énergie,
 // cage filaire, anneaux et bande de texte holographique.
 import * as THREE from 'three';
@@ -94,7 +94,7 @@ function buildShell(radius) {
 function textBandTexture() {
   const w = 2048, h = 64;
   const { canvas, ctx } = makeCanvas(w, h);
-  const text = 'ネオン・ムーン // NEURAL CORE MK-03 // 時間減速 // OVERCLOCK 87% // 電脳 // ';
+  const text = 'SANDEVISTAN // MILITARY GRADE // 時間減速 // CYBERPSYCHOSIS RISK 87% // サンデヴィスタン // ';
   ctx.font = '34px "Share Tech Mono", "DotGothic16", monospace';
   ctx.textBaseline = 'middle';
   ctx.fillStyle = css(PALETTE.cyan);

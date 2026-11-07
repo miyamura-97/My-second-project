@@ -1,3 +1,3 @@
 # My second project
 
-- [`neon-moon/`](neon-moon/) : scène 3D cyberpunk interactive pilotée par le défilement (Three.js). Voir son [README](neon-moon/README.md).
+- [`edgerunners/`](edgerunners/) : fan-projet personnel Cyberpunk: Edgerunners, scène 3D Night City pilotée par le défilement (Three.js). Voir son [README](edgerunners/README.md).

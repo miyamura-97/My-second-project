@@ -26,13 +26,34 @@ export function createScrollRig(camera, chapters) {
   const pointer = new THREE.Vector2();
   const pointerSmooth = new THREE.Vector2();
 
-  const read = () => {
-    const max = document.documentElement.scrollHeight - innerHeight;
-    target = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+  // Chaque chapitre est calé sur le haut de sa <section> : les sections peuvent
+  // avoir des hauteurs différentes (ex. la liste de l'équipe sur mobile).
+  const sections = [...document.querySelectorAll('#story > .chapter')];
+  let anchors = [];
+  const measure = () => {
+    const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    anchors = sections.map((s) => Math.min(s.getBoundingClientRect().top + scrollY, max));
+    anchors[anchors.length - 1] = max;
   };
+  const read = () => {
+    if (anchors.length !== chapters.length) {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      target = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+      return;
+    }
+    const y = scrollY;
+    let i = 0;
+    while (i < n - 1 && y >= anchors[i + 1]) i++;
+    const span = anchors[i + 1] - anchors[i];
+    const f = span > 0 ? Math.min(1, Math.max(0, (y - anchors[i]) / span)) : 1;
+    target = (i + f) / n;
+  };
+  const remeasure = () => { measure(); read(); };
   addEventListener('scroll', read, { passive: true });
-  addEventListener('resize', read);
-  read();
+  addEventListener('resize', remeasure);
+  if ('ResizeObserver' in window) new ResizeObserver(remeasure).observe(document.body);
+  document.fonts?.ready?.then(remeasure);
+  remeasure();
   current = target;
 
   addEventListener('pointermove', (e) => {
@@ -49,6 +70,9 @@ export function createScrollRig(camera, chapters) {
   return {
     coreOffset,
     get progress() { return current; },
+    get target() { return target; },
+    // place la caméra tout de suite sur la cible (tests, mode ?debug)
+    snap() { current = target; },
     get speed() { return speed; },
     get chapter() { return Math.round(current * n); },
     update(dtReal) {

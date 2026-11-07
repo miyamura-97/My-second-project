@@ -1,4 +1,4 @@
-// Ralenti : tant qu'on maintient ESPACE, le bouton dédié ou un appui long,
+// Sandevistan : tant qu'on maintient ESPACE, le bouton dédié ou un appui long,
 // le temps du monde descend à ×0,12 et l'implant laisse des images rémanentes
 // aux couleurs de l'arc-en-ciel.
 import * as THREE from 'three';

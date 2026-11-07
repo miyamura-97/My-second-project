@@ -9,6 +9,9 @@
   --magenta: #ff2a6d;
   --cyan: #00f0ff;
   --acid: #39ff9c;
+  --red: #ff003c;
+  --violet: #b07bff;
+  --orange: #ff9a3c;
   --on-yellow: #0b0a06;
   --panel: rgb(9 7 20 / 0.66);
   --line: rgb(243 230 0 / 0.35);
@@ -105,6 +108,7 @@ kbd {
   color: var(--yellow);
   margin: 0 0 1rem;
 }
+.boot__brand span { color: var(--magenta); }
 .boot__log {
   list-style: none;
   margin: 0;
@@ -336,6 +340,117 @@ h2 { font-size: clamp(2.2rem, 5.2vw, 3.6rem); }
   font-variant-numeric: tabular-nums;
 }
 
+/* Logo : recréation SVG, remplacée par assets/logo.png s'il existe */
+.logo {
+  margin: 0;
+  width: min(46rem, 100%);
+  line-height: 1;
+}
+.logo__official { display: block; width: 100%; height: auto; }
+.has-logo .logo__mark { display: none; }
+.logo__mark { display: block; width: 100%; height: auto; overflow: visible; }
+.logo__mark text { font-family: var(--f-display); font-weight: 900; font-size: 228px; }
+.logo__cyber text { fill: var(--yellow); }
+.logo__ghost text { fill: var(--cyan); opacity: 0.85; }
+.logo__bar { fill: var(--magenta); }
+.logo__edge {
+  font-family: var(--f-body) !important;
+  font-weight: 700 !important;
+  font-size: 74px !important;
+  fill: var(--ink);
+  letter-spacing: 0.08em;
+}
+.logo__mark { filter: drop-shadow(0 0 24px rgb(243 230 0 / 0.25)); }
+.chapter--hero.is-active .logo__slice { animation: logo-slice 4.2s steps(1, end) infinite; }
+@keyframes logo-slice {
+  0%, 86%, 100% { transform: translateX(0); }
+  88% { transform: translateX(-16px); }
+  91% { transform: translateX(10px); }
+  94% { transform: translateX(-4px); }
+}
+
+/* Équipe */
+.panel--wide { width: min(46rem, 100%); }
+.crew {
+  list-style: none;
+  margin: 0.2rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+.crew__card {
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 0.7rem;
+  align-items: center;
+  padding: 0.45rem 0.6rem 0.45rem 0.45rem;
+  background: rgb(238 234 247 / 0.04);
+  border-left: 2px solid var(--c);
+  min-width: 0;
+}
+.crew__photo {
+  grid-row: 1 / 3;
+  position: relative;
+  width: 2.6rem;
+  height: 2.6rem;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--c) 18%, transparent);
+  border: 1px solid var(--c);
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+}
+.crew__photo b {
+  font-family: var(--f-mono);
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--c);
+  letter-spacing: 0.08em;
+}
+.crew__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.crew__name {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.crew__role {
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  line-height: 1.3;
+  color: var(--mute);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.panel p.threats {
+  font-family: var(--f-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+.threats span {
+  color: var(--on-yellow);
+  background: var(--red);
+  padding: 0.1em 0.5em;
+  margin-right: 0.6em;
+}
+.stats dd.is-danger { color: var(--red); font-size: clamp(1.2rem, 2.4vw, 1.6rem); }
+
 /* Héros */
 .hero {
   display: grid;
@@ -352,13 +467,6 @@ h2 { font-size: clamp(2.2rem, 5.2vw, 3.6rem); }
   color: var(--cyan);
 }
 .eyebrow .jp { color: var(--magenta); margin-right: 0.6em; font-size: 1rem; }
-.hero__title {
-  font-size: clamp(4.2rem, 15vw, 12rem);
-  line-height: 0.8;
-  color: var(--yellow);
-  letter-spacing: -0.01em;
-  text-shadow: 0 0 40px rgb(243 230 0 / 0.25);
-}
 .hero__lede {
   margin: 0;
   max-width: 34ch;
@@ -524,6 +632,14 @@ h2 { font-size: clamp(2.2rem, 5.2vw, 3.6rem); }
   .hero { position: relative; }
   .panel { padding: 1.2rem 1.2rem 1.3rem; }
   .stats dd { font-size: 1.35rem; }
+  .stats dd.is-danger { font-size: 1.05rem; }
+  .hide-narrow { display: none; }
+  .crew { gap: 0.4rem; }
+  .crew__name { white-space: normal; line-height: 1.02; }
+  .crew__card { grid-template-columns: 2.2rem minmax(0, 1fr); column-gap: 0.5rem; padding: 0.35rem 0.4rem 0.35rem 0.35rem; }
+  .crew__photo { width: 2.2rem; height: 2.2rem; }
+  .crew__name { font-size: 1rem; }
+  .crew__role { font-size: 0.64rem; letter-spacing: 0.03em; }
   .vertical-jp { display: none; }
   .progress__track { display: none; }
 }
@@ -537,6 +653,7 @@ h2 { font-size: clamp(2.2rem, 5.2vw, 3.6rem); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .glitch::before, .glitch::after { animation: none !important; }
+  .logo__slice { animation: none !important; }
   .panel, .boot, .dilation { transition: none; }
   .chapter:not(.is-active) .panel { transform: none; }
 }

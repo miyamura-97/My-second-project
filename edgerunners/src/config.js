@@ -36,6 +36,9 @@ export const WORLD = {
   zMax: 110,
   fogDensity: 0.0021,
   moon: { position: [0, 470, -1800], radius: 165 },
+  // Tour Arasaka : au bout de l'avenue, un peu à droite. Visible dans l'axe depuis le
+  // héros, elle encadre la Lune au dernier chapitre sans la masquer.
+  arasaka: { x: 74, z: -1000, w: 48, d: 48, h: 340 },
 };
 
 // Une image clé de caméra par chapitre (même ordre que les <section> du HTML).
@@ -43,25 +46,31 @@ export const WORLD = {
 // core : place de l'implant dans le repère de la caméra
 //   x = droite, y = haut, dist = profondeur devant l'objectif, scale = taille.
 export const CHAPTERS = [
-  { name: 'Nuit', pos: [0, 74, 160], look: [0, 60, 20], core: { x: 6.2, y: 0.6, dist: 24, scale: 0.62 } },
-  { name: 'Ville', pos: [-5, 32, -10], look: [3, 31, -170], core: { x: -6.4, y: 0.2, dist: 24, scale: 0.52 } },
-  { name: 'Chrome', pos: [4, 44, -235], look: [1, 43, -320], core: { x: 4.8, y: 0.0, dist: 18, scale: 0.66 } },
-  { name: 'Course', pos: [1.5, 23, -430], look: [0, 25, -580], core: { x: 6.6, y: 1.6, dist: 27, scale: 0.46 } },
-  { name: 'Lune', pos: [0, 150, -770], look: [0, 300, -1800], core: { x: 12, y: 1.5, dist: 34, scale: 0.4 } },
+  { name: 'Night City', pos: [0, 74, 160], look: [0, 60, 20], core: { x: 6.2, y: 0.6, dist: 24, scale: 0.62 } },
+  { name: 'Arasaka', pos: [-5, 32, -10], look: [3, 31, -170], core: { x: -6.4, y: 0.2, dist: 24, scale: 0.52 } },
+  { name: 'Sandevistan', pos: [4, 44, -235], look: [1, 43, -320], core: { x: 4.8, y: 0.0, dist: 18, scale: 0.66 } },
+  { name: "L'équipe", pos: [1.5, 23, -430], look: [0, 25, -580], core: { x: 6.6, y: 1.6, dist: 27, scale: 0.46 } },
+  { name: 'La Lune', pos: [0, 150, -770], look: [0, 300, -1800], core: { x: -12, y: 1.5, dist: 34, scale: 0.4 } },
 ];
 
-// Textes des enseignes holographiques de la ville (japonais + petite ligne latine).
+// Enseignes holographiques de Night City (japonais + petite ligne latine).
 export const SIGNS = [
-  { jp: 'ネオン', latin: 'NEON 24H' },
-  { jp: '夜城', latin: 'NIGHT DISTRICT' },
+  { jp: 'ミリテック', latin: 'MILITECH' },
+  { jp: 'ナイトシティ', latin: 'NIGHT CITY' },
   { jp: '月へ', latin: 'TO THE MOON' },
-  { jp: 'クローム', latin: 'CHROME CLINIC' },
+  { jp: 'アフターライフ', latin: 'AFTERLIFE' },
   { jp: '電脳', latin: 'CYBERDECK' },
   { jp: 'ラーメン', latin: 'RAMEN 03:00' },
-  { jp: '酒場', latin: 'BAR / OPEN' },
-  { jp: '未来', latin: 'FUTURE INC.' },
-  { jp: '自由', latin: 'NO RULES' },
-  { jp: '夢', latin: 'DREAM DEALER' },
-  { jp: '危険', latin: 'DANGER ZONE' },
-  { jp: '速度', latin: 'MAX SPEED' },
+  { jp: 'リジー', latin: "LIZZIE'S BAR" },
+  { jp: 'カンタオ', latin: 'KANG TAO' },
+  { jp: '救急', latin: 'TRAUMA TEAM' },
+  { jp: '夢', latin: 'BRAINDANCE' },
+  { jp: '危険', latin: 'NCPD ZONE' },
+  { jp: '義体', latin: 'RIPPERDOC' },
 ];
+
+// Enseignes de la tour Arasaka
+export const ARASAKA_SIGNS = {
+  vertical: { jp: '荒坂', latin: 'ARASAKA' },
+  crown: { jp: '荒坂', latin: 'ARASAKA CORP.' },
+};

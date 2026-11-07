@@ -1,7 +1,7 @@
 // Enseignes holographiques : textures dessinées sur canvas (kanji/katakana + latin),
 // posées sur les façades qui donnent sur l'avenue, plus trois bannières suspendues.
 import * as THREE from 'three';
-import { PALETTE, SIGNS, WORLD } from '../config.js';
+import { PALETTE, SIGNS, ARASAKA_SIGNS, WORLD } from '../config.js';
 import { createRng } from '../utils/random.js';
 import { makeCanvas, toTexture, css } from '../utils/canvas.js';
 
@@ -69,9 +69,17 @@ function horizontalSign(sign, colorHex, accentHex) {
   const accent = css(accentHex);
   frame(ctx, w, h, color);
   ctx.textBaseline = 'middle';
-  ctx.font = `120px ${JP_FONT}`;
   ctx.textAlign = 'left';
-  neonText(ctx, sign.jp, 50, 118, color, 26);
+  // le mot japonais occupe au plus 58 % de la largeur : on réduit la police s'il est long
+  let size = 120;
+  ctx.font = `${size}px ${JP_FONT}`;
+  const maxJp = w * 0.58 - 50;
+  const measured = ctx.measureText(sign.jp).width;
+  if (measured > maxJp) {
+    size = Math.floor(size * maxJp / measured);
+    ctx.font = `${size}px ${JP_FONT}`;
+  }
+  neonText(ctx, sign.jp, 50, 128, color, 26);
   ctx.font = `34px ${LATIN_FONT}`;
   ctx.textAlign = 'right';
   neonText(ctx, sign.latin, w - 50, 70, accent, 12);
@@ -94,14 +102,14 @@ export function createSigns(avenueLots) {
   const vTextures = SIGNS.map((s, i) => verticalSign(s, NEONS[i % NEONS.length]));
   const hTextures = SIGNS.map((s, i) => horizontalSign(s, NEONS[(i + 2) % NEONS.length], NEONS[(i + 4) % NEONS.length]));
 
-  const addSign = (texture, width, height, position, rotationY, intensity) => {
+  const addSign = (texture, width, height, position, rotationY, intensity, fog = true) => {
     const material = new THREE.MeshBasicMaterial({
       map: texture,
       transparent: true,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
       side: THREE.DoubleSide,
-      fog: true,
+      fog,
     });
     material.color.setScalar(intensity);
     const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, height), material);
@@ -140,6 +148,18 @@ export function createSigns(avenueLots) {
       addSign(hTextures[idx], width, height, new THREE.Vector3(faceX, y, lot.z), -side * Math.PI / 2, r.range(1.1, 1.7));
     }
   });
+
+  // Tour Arasaka : enseignes sur la façade avant (face à la caméra qui remonte l'avenue).
+  // Sans brouillard : elles doivent percer la brume comme un repère.
+  {
+    const a = WORLD.arasaka;
+    const red = PALETTE.red;
+    const frontZ = a.z + a.d / 2 + 0.3;
+    addSign(verticalSign(ARASAKA_SIGNS.vertical, red), 22, 73, new THREE.Vector3(a.x, 120, frontZ), 0, 1.6, false);
+    addSign(horizontalSign(ARASAKA_SIGNS.crown, red, PALETTE.white), 46, 15.3, new THREE.Vector3(a.x, 282, frontZ), 0, 1.6, false);
+    items[items.length - 1].flicker = false;
+    items[items.length - 2].flicker = false;
+  }
 
   // Bannières suspendues au-dessus de l'avenue, face à la caméra qui arrive
   [

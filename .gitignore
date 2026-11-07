@@ -1,0 +1,5 @@
+# Fichiers officiels (logo, images de la série) : à garder en local uniquement,
+# ils appartiennent à leurs ayants droit et ne doivent pas partir sur GitHub.
+edgerunners/assets/logo.*
+edgerunners/assets/crew/*
+!edgerunners/assets/crew/.gitkeep
